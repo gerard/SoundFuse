@@ -104,6 +104,7 @@ public class BoardActivity extends Activity {
                 startActivityForResult(i, 0);
             case R.id.toggle_sequencer:
                 sequencer.toggle();
+                progressBarView.toggle();
         }
         return false;
     }

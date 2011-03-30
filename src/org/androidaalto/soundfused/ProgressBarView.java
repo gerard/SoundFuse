@@ -51,6 +51,8 @@ public class ProgressBarView extends View implements OnBPMListener {
     private static final int BAR_TRANSPARENCY = 200;
 
     long updateDelay, beatTime;
+    
+    boolean visible;
 
     Runnable progressRunnable = new Runnable() {
 
@@ -74,6 +76,7 @@ public class ProgressBarView extends View implements OnBPMListener {
         barHeight = height;
         totalWidth = width;
         currentBarXPos = 0;
+        visible = true;
 
         // How long it takes to go through a beat
         this.beatTime = (60 * 1000) / bpm;
@@ -98,7 +101,9 @@ public class ProgressBarView extends View implements OnBPMListener {
     @Override
     protected void onDraw(Canvas canvas) {
         synchronized (progressBar) {
-            progressBar.draw(canvas);
+            if (visible) {
+            	progressBar.draw(canvas);
+            }
         }
     }
 
@@ -110,5 +115,11 @@ public class ProgressBarView extends View implements OnBPMListener {
         for (int i = 0; i < beatTime; i += updateDelay) {
         	progressHandler.postDelayed(progressRunnable, i);
         }
+    }
+    
+    public void toggle() {
+    	visible = !visible;
+    	progressHandler.removeCallbacks(progressRunnable);
+    	thisView.invalidate();
     }
 }
